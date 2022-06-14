@@ -128,11 +128,11 @@ internal static class MeetingInterface
         }
     }
 
-    private static List<Meeting> FilterAttendeesCount(IReadOnlyCollection<Meeting> meetings)
+    private static List<Meeting> FilterAttendeesCount(List<Meeting> meetings)
     {
         Console.WriteLine("Enter comparison sign (< > =) and a number: ");
 
-        IEnumerable<Meeting>? filteredMeetings = null;
+        List<Meeting>? filteredMeetings = null;
 
         do
         {
@@ -150,13 +150,13 @@ internal static class MeetingInterface
             switch (op)
             {
                 case '<':
-                    filteredMeetings = meetings.Where(m => m.Attendees.Count < num);
+                    filteredMeetings = meetings.FindAll(m => m.Attendees.Count < num);
                     break;
                 case '>':
-                    filteredMeetings = meetings.Where(m => m.Attendees.Count > num);
+                    filteredMeetings = meetings.FindAll(m => m.Attendees.Count > num);
                     break;
                 case '=':
-                    filteredMeetings = meetings.Where(m => m.Attendees.Count == num);
+                    filteredMeetings = meetings.FindAll(m => m.Attendees.Count == num);
                     break;
                 default:
                     Console.WriteLine("Please try again: ");
@@ -164,40 +164,40 @@ internal static class MeetingInterface
             }
         } while (filteredMeetings == null);
 
-        return filteredMeetings.ToList();
+        return filteredMeetings;
     }
 
-    private static List<Meeting> FilterName(IEnumerable<Meeting> meetings)
+    private static List<Meeting> FilterName(List<Meeting> meetings)
     {
         var name = ReadString("Name: ").ToLower();
-        return meetings.Where(m => m.Name.ToLower().Contains(name)).ToList();
+        return meetings.FindAll(m => m.Name.ToLower().Contains(name));
     }
 
-    private static List<Meeting> FilterDescription(IEnumerable<Meeting> meetings)
+    private static List<Meeting> FilterDescription(List<Meeting> meetings)
     {
         var description = ReadString("Description: ").ToLower();
-        return meetings.Where(m => m.Description.ToLower().Contains(description)).ToList();
+        return meetings.FindAll(m => m.Description.ToLower().Contains(description));
     }
 
-    private static List<Meeting> FilterResponsiblePerson(IEnumerable<Meeting> meetings)
+    private static List<Meeting> FilterResponsiblePerson(List<Meeting> meetings)
     {
         var personName = ReadString("Name: ").ToLower();
-        return meetings.Where(m => m.ResponsiblePerson.ToLower().Contains(personName)).ToList();
+        return meetings.FindAll(m => m.ResponsiblePerson.ToLower().Contains(personName));
     }
 
-    private static List<Meeting> FilterCategory(IEnumerable<Meeting> meetings)
+    private static List<Meeting> FilterCategory(List<Meeting> meetings)
     {
         var category = ReadEnum<MeetingCategory>("Meeting Category (Valid: CodeMonkey | Hub | Short | TeamBuilding):");
-        return meetings.Where(m => m.MeetingCategory == category).ToList();
+        return meetings.FindAll(m => m.MeetingCategory == category);
     }
 
-    private static List<Meeting> FilterType(IEnumerable<Meeting> meetings)
+    private static List<Meeting> FilterType(List<Meeting> meetings)
     {
         var type = ReadEnum<MeetingType>("Meeting Type (Valid: Live | InPerson)");
-        return meetings.Where(m => m.MeetingType == type).ToList();
+        return meetings.FindAll(m => m.MeetingType == type);
     }
 
-    private static List<Meeting> FilterDate(IEnumerable<Meeting> meetings)
+    private static List<Meeting> FilterDate(List<Meeting> meetings)
     {
         var startDate = ReadOptionalDate("Enter Ending Date or Enter to skip");
 
@@ -207,12 +207,12 @@ internal static class MeetingInterface
 
         if (startDate != null && endDate != null)
         {
-            return meetings.Where(m => m.StartDate <= startDate && endDate <= m.EndDate).ToList();
+            return meetings.FindAll(m => m.StartDate <= startDate && endDate <= m.EndDate);
         }
 
         return (startDate != null
-            ? meetings.Where(m => m.StartDate <= startDate)
-            : meetings.Where(m => endDate <= m.EndDate)).ToList();
+            ? meetings.FindAll(m => m.StartDate <= startDate)
+            : meetings.FindAll(m => endDate <= m.EndDate));
     }
 
     private static void ServeFilterMenu(MeetingManager manager)
