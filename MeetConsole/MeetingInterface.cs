@@ -78,6 +78,7 @@ internal static class MeetingInterface
             {
                 return choice;
             }
+            Console.WriteLine("Please try again");
         }
     }
 
@@ -227,7 +228,7 @@ internal static class MeetingInterface
 
         var meetings = manager.Meetings.Values.ToList();
 
-        switch (ReadChoice("Enter choice: ", 7))
+        switch (ReadChoice("Enter choice: ", 8))
         {
             case 0:
                 break;
@@ -270,7 +271,7 @@ internal static class MeetingInterface
         while (true)
         {
             var result = false;
-            switch (ReadChoice("Enter choice: ", 4))
+            switch (ReadChoice("Enter choice: ", 5))
             {
                 case 0:
                     result = CreateMeeting(ref manager);
