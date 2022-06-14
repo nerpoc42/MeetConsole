@@ -1,26 +1,26 @@
-﻿// See https://aka.ms/new-console-template for more information
-
 using System.Text.Json;
-using MeetConsole;
 
-const string fileName = "save.json";
-try
+namespace MeetConsole;
+
+public static class Program
 {
-    var text = File.ReadAllText(fileName);
+    public static void Main()
+    {
+        const string fileName = "meetings.json";
 
-    var data = JsonSerializer.Deserialize<MeetingData>(text);
+        MeetingManager manager;
+        try
+        {
+            var text = File.ReadAllText(fileName);
+            manager = JsonSerializer.Deserialize<MeetingManager>(text) ?? new MeetingManager();
+        }
+        catch (Exception)
+        {
+            manager = new MeetingManager();
+        }
 
-    AttendeeCollection.AttendeeList = data.Attendees;
-    MeetingCollection.Meetings = data.Meetings;
+        MeetingInterface.ServeMainMenu(ref manager);
+        
+        File.WriteAllText(fileName, JsonSerializer.Serialize(manager));
+    }
 }
-catch (FileNotFoundException)
-{
-    Console.WriteLine("Could not load meetings from a file");
-} 
-
-new MeetingMainMenu().Serve();
-
-var jsonString = JsonSerializer.Serialize(new MeetingData
-    { Meetings = MeetingCollection.Meetings, Attendees = AttendeeCollection.AttendeeList });
-
-File.WriteAllText(fileName, jsonString);

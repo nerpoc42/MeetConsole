@@ -1,66 +1,61 @@
-using System.Globalization;
+using System.Text.Json.Serialization;
 
 namespace MeetConsole;
 
-public static class AttendeeCollection
+internal class Meeting
 {
-    // Cannot do reference to meeting.
-    public static Dictionary<string, Dictionary<int, DateTime>> AttendeeList { get; set; } = new();
+    public string Name { get; }
+    public string Description { get; }
+    public string ResponsiblePerson { get; }
+    public MeetingCategory MeetingCategory { get; }
+    public MeetingType MeetingType { get; }
+    public DateTime StartDate { get; }
+    public DateTime EndDate { get; }
+    public Dictionary<string, DateTime> Attendees { get; }
 
-    public static bool AddToMeeting(string personName, int meetingId, DateTime joinDate)
+    public Meeting(string name, string description, string responsiblePerson, MeetingCategory meetingCategory,
+        MeetingType meetingType,
+        DateTime startDate, DateTime endDate)
     {
-        var meeting = MeetingCollection.GetMeeting(meetingId);
-
-        if (!AttendeeList.ContainsKey(personName))
-        {
-            AttendeeList.Add(personName,
-                new Dictionary<int, DateTime>());
-        }
-
-        if (joinDate < meeting.StartDate || joinDate > meeting.EndDate)
-        {
-            return false;
-        }
-
-        foreach (var scheduledJoin in AttendeeList[personName])
-        {
-            var scheduledMeeting = MeetingCollection.GetMeeting(scheduledJoin.Key);
-
-            if (!(scheduledMeeting.EndDate <= meeting.EndDate) || !(joinDate >= scheduledMeeting.StartDate)) continue;
-            Console.WriteLine("Warning: Person is present in multiple meetings.");
-            break;
-        }
-
-        if (AttendeeList[personName].ContainsKey(meetingId))
-        {
-            return false;
-        }
-
-        AttendeeList[personName].Add(meetingId, joinDate);
-        meeting.Attendees.Add(personName, joinDate);
-        return true;
+        Name = name;
+        Description = description;
+        ResponsiblePerson = responsiblePerson;
+        MeetingCategory = meetingCategory;
+        MeetingType = meetingType;
+        StartDate = startDate;
+        EndDate = endDate;
+        Attendees = new Dictionary<string, DateTime>();
     }
 
-    public static bool RemoveFromMeeting(string personName, int meetingId)
+    [JsonConstructor]
+    public Meeting(string name, string description, string responsiblePerson, MeetingCategory category,
+        MeetingType type,
+        DateTime startDate, DateTime endDate, Dictionary<string, DateTime> attendees)
     {
-        if (!AttendeeList.ContainsKey(personName))
-        {
-            return false;
-        }
+        Name = name;
+        Description = description;
+        ResponsiblePerson = responsiblePerson;
+        MeetingCategory = category;
+        MeetingType = type;
+        StartDate = startDate;
+        EndDate = endDate;
+        Attendees = attendees;
+    }
 
-        if (MeetingCollection.GetMeeting(meetingId).ResponsiblePerson == personName)
-        {
-            return false;
-        }
-
-        MeetingCollection.GetMeeting(meetingId).Attendees.Remove(personName);
-        AttendeeList[personName].Remove(meetingId);
-
-        return true;
+    public override string ToString()
+    {
+        return $"Name: {Name}\n" +
+               $"Description: {Description}\n" +
+               $"Responsible user: {ResponsiblePerson}\n" +
+               $"Category: {MeetingCategory} \n" +
+               $"Type: {MeetingType} \n" +
+               $"Starting date: {StartDate:yyyy-MM-dd} \n" +
+               $"Ending date: {EndDate:yyyy-MM-dd} \n" +
+               $"Number of attendees: {Attendees.Count} \n";
     }
 }
 
-public enum MeetingCategory
+internal enum MeetingCategory
 {
     CodeMonkey,
     Hub,
@@ -68,98 +63,8 @@ public enum MeetingCategory
     TeamBuilding
 }
 
-public enum MeetingType
+internal enum MeetingType
 {
     Live,
     InPerson
-}
-
-// Rewrite in class maybe?
-public class Meeting
-{
-    public string? Name { get; set; }
-    public string? ResponsiblePerson { get; set; }
-    public string? Description { get; set; }
-    public MeetingCategory? Category { get; set; }
-    public MeetingType? Type { get; set; }
-    public DateTime? StartDate { get; set; }
-    public DateTime? EndDate { get; set; }
-    public Dictionary<string, DateTime> Attendees { get; }
-
-    public Meeting()
-    {
-        Attendees = new Dictionary<string, DateTime>();
-    }
-
-    public override string ToString()
-    {
-        return @$"Meeting Name: {Name ?? "None"}
-Description: {Description ?? "None"}
-Responsible Person: {ResponsiblePerson ?? "None"}
-Category: {(Category != null ? Enum.GetName((MeetingCategory)Category) : "None")}            
-Type: {(Category != null ? Enum.GetName((MeetingCategory)Category) : "None")}
-Start Date: {StartDate?.ToString(CultureInfo.InvariantCulture) ?? "None"}
-End Date: {EndDate?.ToString(CultureInfo.InvariantCulture) ?? "None"}
-Attendees Count: {Attendees.Count}";
-    }
-}
-
-public static class MeetingCollection
-{
-    private static int _nextId;
-
-    private static Dictionary<int, Meeting> _meetings = new();
-
-    public static Dictionary<int, Meeting> Meetings
-    {
-        get => _meetings;
-        set
-        {
-            _meetings = value;
-            _nextId = _meetings.Last().Key + 1;
-        }
-    }
-
-    public static Meeting GetMeeting(int meetingId)
-    {
-        return Meetings[meetingId];
-    }
-
-    public static int CreateMeeting(Meeting meeting)
-    {
-        var id = _nextId;
-        Meetings.Add(id, meeting);
-        ++_nextId;
-        return id;
-    }
-
-    public static bool RemoveMeeting(int meetingId, string personName)
-    {
-        if (!Meetings.ContainsKey(meetingId))
-        {
-            return false;
-        }
-        
-        var meeting = Meetings[meetingId];
-        if (meeting.ResponsiblePerson != personName)
-        {
-            return false;
-        }
-
-        foreach (var attendee in meeting.Attendees)
-        {
-            if (!AttendeeCollection.RemoveFromMeeting(attendee.Key, meetingId))
-            {
-                return false;
-            }
-        }
-        
-        return Meetings.Remove(meetingId);
-    }
-}
-
-public struct MeetingData
-{
-    public Dictionary<string, Dictionary<int, DateTime>> Attendees { get; set; }
-    public Dictionary<int, Meeting> Meetings { get; set; }
 }
