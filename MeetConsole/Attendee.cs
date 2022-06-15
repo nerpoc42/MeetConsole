@@ -1,13 +1,7 @@
 namespace MeetConsole;
 
-internal class Attendee
+public class Attendee
 {
-    public string Name { get; }
-    public DateTime Date { get; }
-
-    public Attendee(string name, DateTime date)
-    {
-        Name = name;
-        Date = date;
-    }
+    public string? Name { get; init; }
+    public DateTime Date { get; init; }
 }

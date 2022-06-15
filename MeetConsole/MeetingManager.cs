@@ -1,49 +1,38 @@
-using System.Collections.ObjectModel;
-using System.Text.Json.Serialization;
-
 namespace MeetConsole;
 
-internal class MeetingManager
+public class MeetingManager
 {
-    private readonly Dictionary<string, Meeting> _meetings;
-
-    public ReadOnlyDictionary<string, Meeting> Meetings => new(_meetings);
-
-    public MeetingManager()
-    {
-        _meetings = new Dictionary<string, Meeting>();
-    }
-
-    [JsonConstructor]
-    public MeetingManager(Dictionary<string, Meeting> meetings)
-    {
-        _meetings = new Dictionary<string, Meeting>(meetings);
-    }
+    public Dictionary<string, Meeting> Meetings { get; init; } = new();
 
     public bool TryAddMeeting(Meeting meeting)
     {
-        return _meetings.TryAdd(meeting.Name.ToLower(), meeting);
+        return meeting.Name != null && Meetings.TryAdd(meeting.Name.ToLower(), meeting);
     }
 
     public bool TryRemoveMeeting(string meetingName, string personName)
     {
         meetingName = meetingName.ToLower();
         personName = personName.ToLower();
-        
-        if (!_meetings.TryGetValue(meetingName, out var meeting))
+
+        if (!Meetings.TryGetValue(meetingName, out var meeting))
         {
             return false;
         }
 
-        return meeting.ResponsiblePerson == personName && _meetings.Remove(meetingName);
+        return meeting.ResponsiblePerson == personName && Meetings.Remove(meetingName);
     }
 
     public bool TryAddAttendeeToMeeting(string meetingName, Attendee attendee)
     {
         meetingName = meetingName.ToLower();
+        if (attendee.Name == null)
+        {
+            return false;
+        }
+
         var attendeeName = attendee.Name.ToLower();
-        
-        if (!_meetings.TryGetValue(meetingName, out var meeting))
+
+        if (!Meetings.TryGetValue(meetingName, out var meeting))
         {
             return false;
         }
@@ -61,8 +50,8 @@ internal class MeetingManager
     {
         meetingName = meetingName.ToLower();
         personName = personName.ToLower();
-        
-        if (!_meetings.TryGetValue(meetingName, out var meeting))
+
+        if (!Meetings.TryGetValue(meetingName, out var meeting))
         {
             return false;
         }
@@ -73,14 +62,19 @@ internal class MeetingManager
     public bool HasIntersectingMeetings(string meetingName, Attendee attendee)
     {
         meetingName = meetingName.ToLower();
-        var attendeeName = attendee.Name.ToLower();
-        
-        if (!_meetings.TryGetValue(meetingName, out var currentMeeting))
+        if (attendee.Name == null)
         {
             return false;
         }
 
-        foreach (var (name, meeting) in _meetings)
+        var attendeeName = attendee.Name.ToLower();
+
+        if (!Meetings.TryGetValue(meetingName, out var currentMeeting))
+        {
+            return false;
+        }
+
+        foreach (var (name, meeting) in Meetings)
         {
             if (name == meetingName)
             {

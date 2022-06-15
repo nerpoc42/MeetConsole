@@ -1,6 +1,6 @@
 namespace MeetConsole;
 
-internal static class MeetingInterface
+public static class MeetingInterface
 {
     private static string ReadString(string display)
     {
@@ -78,6 +78,7 @@ internal static class MeetingInterface
             {
                 return choice;
             }
+
             Console.WriteLine("Please try again");
         }
     }
@@ -87,12 +88,21 @@ internal static class MeetingInterface
         var name = ReadString("Meeting name: ");
         var description = ReadString("Meeting description: ");
         var responsiblePerson = ReadString("Responsible person: ");
-        var category = ReadEnum<MeetingCategory>("Meeting Category (Valid: CodeMonkey | Hub | Short | TeamBuilding):");
-        var type = ReadEnum<MeetingType>("Meeting Type (Valid: Live | InPerson)");
+        var category = ReadEnum<MeetingCategory>("Meeting Category (Valid: CodeMonkey | Hub | Short | TeamBuilding): ");
+        var type = ReadEnum<MeetingType>("Meeting Type (Valid: Live | InPerson): ");
         var startDate = ReadDate("Meeting Start Date: ");
         var endDate = ReadDate("Meeting End Date: ");
 
-        var meeting = new Meeting(name, description, responsiblePerson, category, type, startDate, endDate);
+        var meeting = new Meeting
+        {
+            Name = name,
+            Description = description,
+            ResponsiblePerson = responsiblePerson,
+            MeetingCategory = category,
+            MeetingType = type,
+            StartDate = startDate,
+            EndDate = endDate
+        };
         return manager.TryAddMeeting(meeting);
     }
 
@@ -107,7 +117,11 @@ internal static class MeetingInterface
         var meetingName = ReadString("Meeting name: ");
         var personName = ReadString("Person name: ");
         var attendanceDate = ReadDate("Attendance date: ");
-        var attendee = new Attendee(personName, attendanceDate);
+        var attendee = new Attendee
+        {
+            Name = personName,
+            Date = attendanceDate
+        };
         return manager.TryAddAttendeeToMeeting(meetingName, attendee);
     }
 
@@ -170,19 +184,19 @@ internal static class MeetingInterface
     private static List<Meeting> FilterName(List<Meeting> meetings)
     {
         var name = ReadString("Name: ").ToLower();
-        return meetings.FindAll(m => m.Name.ToLower().Contains(name));
+        return meetings.FindAll(m => m.Name!.ToLower().Contains(name));
     }
 
     private static List<Meeting> FilterDescription(List<Meeting> meetings)
     {
         var description = ReadString("Description: ").ToLower();
-        return meetings.FindAll(m => m.Description.ToLower().Contains(description));
+        return meetings.FindAll(m => m.Description!.ToLower().Contains(description));
     }
 
     private static List<Meeting> FilterResponsiblePerson(List<Meeting> meetings)
     {
         var personName = ReadString("Name: ").ToLower();
-        return meetings.FindAll(m => m.ResponsiblePerson.ToLower().Contains(personName));
+        return meetings.FindAll(m => m.ResponsiblePerson!.ToLower().Contains(personName));
     }
 
     private static List<Meeting> FilterCategory(List<Meeting> meetings)

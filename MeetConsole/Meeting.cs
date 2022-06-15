@@ -1,46 +1,15 @@
-using System.Text.Json.Serialization;
-
 namespace MeetConsole;
 
-internal class Meeting
+public class Meeting
 {
-    public string Name { get; }
-    public string Description { get; }
-    public string ResponsiblePerson { get; }
-    public MeetingCategory MeetingCategory { get; }
-    public MeetingType MeetingType { get; }
-    public DateTime StartDate { get; }
-    public DateTime EndDate { get; }
-    public Dictionary<string, DateTime> Attendees { get; }
-
-    public Meeting(string name, string description, string responsiblePerson, MeetingCategory meetingCategory,
-        MeetingType meetingType,
-        DateTime startDate, DateTime endDate)
-    {
-        Name = name;
-        Description = description;
-        ResponsiblePerson = responsiblePerson;
-        MeetingCategory = meetingCategory;
-        MeetingType = meetingType;
-        StartDate = startDate;
-        EndDate = endDate;
-        Attendees = new Dictionary<string, DateTime>();
-    }
-
-    [JsonConstructor]
-    public Meeting(string name, string description, string responsiblePerson, MeetingCategory category,
-        MeetingType type,
-        DateTime startDate, DateTime endDate, Dictionary<string, DateTime> attendees)
-    {
-        Name = name;
-        Description = description;
-        ResponsiblePerson = responsiblePerson;
-        MeetingCategory = category;
-        MeetingType = type;
-        StartDate = startDate;
-        EndDate = endDate;
-        Attendees = attendees;
-    }
+    public string? Name { get; init; }
+    public string? Description { get; init; }
+    public string? ResponsiblePerson { get; init; }
+    public MeetingCategory MeetingCategory { get; init; }
+    public MeetingType MeetingType { get; init; }
+    public DateTime StartDate { get; init; }
+    public DateTime EndDate { get; init; }
+    public Dictionary<string, DateTime> Attendees { get; } = new();
 
     public override string ToString()
     {
@@ -55,7 +24,7 @@ internal class Meeting
     }
 }
 
-internal enum MeetingCategory
+public enum MeetingCategory
 {
     CodeMonkey,
     Hub,
@@ -63,7 +32,7 @@ internal enum MeetingCategory
     TeamBuilding
 }
 
-internal enum MeetingType
+public enum MeetingType
 {
     Live,
     InPerson

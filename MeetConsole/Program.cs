@@ -20,7 +20,7 @@ public static class Program
         }
 
         MeetingInterface.ServeMainMenu(ref manager);
-        
+
         File.WriteAllText(fileName, JsonSerializer.Serialize(manager));
     }
 }
