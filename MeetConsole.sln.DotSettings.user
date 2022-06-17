@@ -1,0 +1,16 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=14c7cf27_002D8443_002D4ab7_002D9643_002D1d4a220923b4/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="MeetingManagerTests #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;NUnit3x::73BEA715-6F93-4A42-8E83-B71CE6FE9C65::net6.0::MeetConsoleTests.MeetingManagerTests&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=6218e2cd_002Df733_002D4f14_002D82bd_002D76f55bdcfdb6/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="MeetingManagerTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;NUnit3x::73BEA715-6F93-4A42-8E83-B71CE6FE9C65::net6.0::MeetConsoleTests.MeetingManagerTests&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=75bcd0c2_002D795c_002D4daa_002Dad01_002Dd6e175a165ba/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="MeetingManagerTests #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;NUnit3x::73BEA715-6F93-4A42-8E83-B71CE6FE9C65::net6.0::MeetConsoleTests.MeetingManagerTests&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

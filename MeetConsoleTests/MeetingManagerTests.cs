@@ -1,6 +1,10 @@
+using System;
+using System.IO;
 using NUnit.Framework;
+using MeetConsole.Models;
+using MeetConsole.Services;
 
-namespace MeetConsole;
+namespace MeetConsoleTests;
 
 public class MeetingManagerTests
 {
@@ -10,7 +14,11 @@ public class MeetingManagerTests
     [SetUp]
     public void SetUp()
     {
-        _manager = new MeetingManager();
+        const string fileName = "test_meetings.json";
+        // Ensure data from previous tests are not loaded.
+        File.Create(fileName).Close(); 
+        _manager = new MeetingManager(new MeetingRepository(fileName));
+        
         var meeting = new Meeting
         {
             Name = MeetingName,
@@ -22,7 +30,7 @@ public class MeetingManagerTests
             EndDate = new DateTime(2000, 1, 1)
         };
 
-        Assert.IsTrue(_manager.TryAddMeeting(meeting));
+        _manager.TryAddMeeting(meeting);
     }
 
     [Test]

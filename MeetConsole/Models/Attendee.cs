@@ -1,6 +1,6 @@
-namespace MeetConsole;
+namespace MeetConsole.Models;
 
-public class Attendee
+public struct Attendee
 {
     public string? Name { get; init; }
     public DateTime Date { get; init; }

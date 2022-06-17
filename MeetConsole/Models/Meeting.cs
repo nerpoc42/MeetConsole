@@ -1,4 +1,4 @@
-namespace MeetConsole;
+namespace MeetConsole.Models;
 
 public class Meeting
 {
@@ -22,18 +22,4 @@ public class Meeting
                $"Ending date: {EndDate:yyyy-MM-dd} \n" +
                $"Number of attendees: {Attendees.Count} \n";
     }
-}
-
-public enum MeetingCategory
-{
-    CodeMonkey,
-    Hub,
-    Short,
-    TeamBuilding
-}
-
-public enum MeetingType
-{
-    Live,
-    InPerson
 }
